@@ -19,9 +19,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       references: {
         model: 'Groups',
-        key: 'id'
-      },
-      onDelete: 'SET NULL',
+        key: 'id',
+        onDelete: 'CASCADE',
+      }
     }
   });
 

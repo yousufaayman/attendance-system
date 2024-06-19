@@ -15,14 +15,14 @@ module.exports = (sequelize, DataTypes) => {
         model: 'Teachers',
         key: 'id'
       },
-      onDelete: 'SET NULL',
+      onDelete: 'CASCADE',
     }
   });
 
   Course.associate = function(models) {
     Course.hasMany(models.Class, { foreignKey: 'course_id' });
     Course.hasMany(models.Group, { foreignKey: 'course_id' });
-    Course.belongsTo(models.Teacher, { foreignKey: 'teacher_id' });
+    Course.belongsTo(models.Teacher, { foreignKey: 'teacher_id', onDelete: 'CASCADE' });
   };
 
   return Course;

@@ -10,7 +10,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       references: {
         model: 'Courses',
-        key: 'id'
+        key: 'id',
+        onDelete: 'CASCADE',
       }
     }
   });

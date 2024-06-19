@@ -4,6 +4,7 @@ import LoginPage from './pages/LoginPage';
 import AdminDashboard from './pages/AdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './AuthContext';
+import TeacherDashboard from './pages/TeacherDahboard';
 
 const App = () => {
   return (
@@ -14,6 +15,9 @@ const App = () => {
 
       <Route element={<ProtectedRoute roles={['admin']} />}>
         <Route path="/admin" element={<AdminDashboard />} />
+      </Route>
+      <Route element={<ProtectedRoute roles={['teacher']} />}>
+        <Route path="/teacher" element={<TeacherDashboard />} />
       </Route>
     </Routes>
   </AuthProvider>

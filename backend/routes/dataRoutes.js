@@ -1,7 +1,7 @@
 const express = require('express');
 const { Student, Teacher, Class, Course, Group, Room } = require('../models');
-const dataController = require('../controllers/dataController');
 const { protect } = require('../middleware/authMiddleware');
+const dataController = require('../controllers/dataController');
 const router = express.Router();
 
 router.get('/:table', protect, dataController.getData);
@@ -14,24 +14,9 @@ router.get('/courses', protect, dataController.getCourses);
 router.get('/teachers', protect, dataController.getTeachers);
 router.get('/rooms', protect, dataController.getRooms);
 
-
-function getModel(table) {
-  switch (table) {
-    case 'admins':
-      return Admin;
-    case 'teachers':
-      return Teacher;
-    case 'classes':
-      return Class;
-    case 'courses':
-      return Course;
-    case 'groups':
-      return Group;
-    case 'rooms':
-      return Room;
-    default:
-      throw new Error('Invalid table name');
-  }
-}
+router.get('/teacher/courses', protect, dataController.getTeacherCourses);
+router.get('/teacher/courses/:courseId/classes', protect, dataController.getCourseClasses);
+router.get('/teacher/courses/:courseId/students', protect, dataController.getCourseStudents);
+router.get('/teacher/courses/:courseId/attendance', protect, dataController.getCourseAttendance);
 
 module.exports = router;
