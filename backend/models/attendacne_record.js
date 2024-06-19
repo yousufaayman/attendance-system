@@ -28,8 +28,8 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   AttendanceRecord.associate = function(models) {
-    AttendanceRecord.belongsTo(models.Student, { foreignKey: 'student_id' });
-    AttendanceRecord.belongsTo(models.Class, { foreignKey: 'class_id' });
+    AttendanceRecord.belongsTo(models.Student, { foreignKey: 'student_id',  onDelete: 'CASCADE' });
+    AttendanceRecord.belongsTo(models.Class, { foreignKey: 'class_id', onDelete: 'CASCADE' });
   };
 
   return AttendanceRecord;

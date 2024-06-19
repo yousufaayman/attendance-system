@@ -14,9 +14,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       references: {
         model: 'Rooms',
-        key: 'id'
-      },
-      onDelete: 'SET NULL',
+        key: 'id',
+        onDelete: 'SET NULL',
+      }
     },
     start_time: {
       type: DataTypes.DATE,
@@ -30,17 +30,17 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       references: {
         model: 'Teachers',
-        key: 'id'
-      },
-      onDelete: 'SET NULL',
+        key: 'id',
+        onDelete: 'SET NULL',
+      }
     }
   });
 
   Class.associate = function(models) {
-    Class.belongsTo(models.Course, { foreignKey: 'course_id' });
-    Class.belongsTo(models.Room, { foreignKey: 'room_id' });
-    Class.belongsTo(models.Teacher, { foreignKey: 'teacher_id' });
-    Class.hasMany(models.AttendanceRecord, { foreignKey: 'class_id' });
+    Class.belongsTo(models.Course, { foreignKey: 'course_id', onDelete: 'CASCADE'  });
+    Class.belongsTo(models.Room, { foreignKey: 'room_id', onDelete: 'SET NULL'  });
+    Class.belongsTo(models.Teacher, { foreignKey: 'teacher_id', onDelete: 'SET NULL' });
+    Class.hasMany(models.AttendanceRecord, { foreignKey: 'class_id', onDelete: 'CASCADE'  });
   };
 
   return Class;

@@ -97,7 +97,14 @@ const getTeacherCourses = async (req, res) => {
   try {
     const teacherId = req.user.id; 
     const courses = await Course.findAll({
-      where: { teacher_id: teacherId }
+      include: [
+        {
+          model: Teacher,
+          as: 'teachers',
+          where: { id: teacherId },
+          through: { attributes: [] } // exclude the join table attributes
+        }
+      ]
     });
     res.json(courses);
   } catch (error) {

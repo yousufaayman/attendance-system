@@ -26,8 +26,8 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Student.associate = function(models) {
-    Student.belongsTo(models.Group, { foreignKey: 'group_id' });
-    Student.hasMany(models.AttendanceRecord, { foreignKey: 'student_id' });
+    Student.belongsTo(models.Group, { foreignKey: 'group_id', onDelete: 'SET NULL'  });
+    Student.hasMany(models.AttendanceRecord, { foreignKey: 'student_id', onDelete: 'SET NULL' });
   };
 
   return Student;

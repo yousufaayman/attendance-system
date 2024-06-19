@@ -1,4 +1,4 @@
-const { sequelize, Admin, Room, Course, Teacher, Student, Group, Class, AttendanceRecord } = require('./models');
+const { sequelize, Admin, Room, Course, Teacher, Student, Group, Class, AttendanceRecord, CourseInstructors } = require('./models');
 
 async function seed() {
   await sequelize.sync({ force: true });
@@ -11,8 +11,12 @@ async function seed() {
   const teacher2 = await Teacher.create({ name: 'Jane Smith', email: 'jane.smith@example.com', password: 'password' });
 
   // Create some courses
-  const course1 = await Course.create({ name: 'Math 101', description: 'Basic Mathematics', teacher_id: teacher1.id });
-  const course2 = await Course.create({ name: 'Physics 101', description: 'Introduction to Physics', teacher_id: teacher2.id });
+  const course1 = await Course.create({ name: 'Math 101', description: 'Basic Mathematics' });
+  const course2 = await Course.create({ name: 'Physics 101', description: 'Introduction to Physics' });
+
+  // Associate teachers with courses
+  await CourseInstructors.create({ course_id: course1.id, teacher_id: teacher1.id });
+  await CourseInstructors.create({ course_id: course2.id, teacher_id: teacher2.id });
 
   // Create some rooms
   const room1 = await Room.create({ name: 'Room A', capacity: 30 });

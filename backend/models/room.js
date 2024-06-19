@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Room.associate = function(models) {
-    Room.hasMany(models.Class, { foreignKey: 'room_id' });
+    Room.hasMany(models.Class, { foreignKey: 'room_id', onDelete: 'SET NULL'  });
   };
 
   return Room;
