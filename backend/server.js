@@ -1,6 +1,15 @@
 const express = require('express');
-const app = express();
+const bodyParser = require('body-parser');
+const cors = require('cors');
 const db = require('./models');
+const authRoutes = require('./routes/authRoutes');
+const dataRoutes = require('./routes/dataRoutes');
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+app.use('/api/auth', authRoutes);
 
 db.sequelize.sync().then(() => {
   console.log("Database synchronized");
@@ -8,6 +17,7 @@ db.sequelize.sync().then(() => {
   console.error("Error synchronizing database: ", err);
 });
 
-app.listen(4000, () => {
-  console.log('Server is running on port 4000');
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });

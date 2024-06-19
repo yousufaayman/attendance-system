@@ -6,7 +6,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       references: {
         model: 'Courses',
-        key: 'id'
+        key: 'id',
+        onDelete: 'CASCADE',
       }
     },
     room_id: {
@@ -14,7 +15,8 @@ module.exports = (sequelize, DataTypes) => {
       references: {
         model: 'Rooms',
         key: 'id'
-      }
+      },
+      onDelete: 'SET NULL',
     },
     start_time: {
       type: DataTypes.DATE,
@@ -29,7 +31,8 @@ module.exports = (sequelize, DataTypes) => {
       references: {
         model: 'Teachers',
         key: 'id'
-      }
+      },
+      onDelete: 'SET NULL',
     }
   });
 

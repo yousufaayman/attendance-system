@@ -8,16 +8,21 @@ module.exports = (sequelize, DataTypes) => {
     },
     description: {
       type: DataTypes.TEXT
+    },
+    teacher_id: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'Teachers',
+        key: 'id'
+      },
+      onDelete: 'SET NULL',
     }
   });
 
   Course.associate = function(models) {
     Course.hasMany(models.Class, { foreignKey: 'course_id' });
     Course.hasMany(models.Group, { foreignKey: 'course_id' });
-    Course.belongsToMany(models.Teacher, {
-      through: 'CourseInstructors',
-      foreignKey: 'course_id'
-    });
+    Course.belongsTo(models.Teacher, { foreignKey: 'teacher_id' });
   };
 
   return Course;

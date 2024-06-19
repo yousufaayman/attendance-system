@@ -7,14 +7,17 @@ module.exports = (sequelize, DataTypes) => {
       references: {
         model: 'Students',
         key: 'id'
-      }
+      },
+      onDelete: 'CASCADE',
     },
     class_id: {
       type: DataTypes.INTEGER,
       references: {
         model: 'Classes',
         key: 'id'
-      }
+      },
+      onDelete: 'CASCADE',
+
     },
     check_in_time: {
       type: DataTypes.DATE

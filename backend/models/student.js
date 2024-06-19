@@ -1,5 +1,4 @@
 'use strict';
-const bcrypt = require('bcrypt');
 
 module.exports = (sequelize, DataTypes) => {
   const Student = sequelize.define('Student', {
@@ -21,13 +20,8 @@ module.exports = (sequelize, DataTypes) => {
       references: {
         model: 'Groups',
         key: 'id'
-      }
-    }
-  }, {
-    hooks: {
-      beforeCreate: async (student) => {
-        student.password = await bcrypt.hash(student.password, 10);
-      }
+      },
+      onDelete: 'SET NULL',
     }
   });
 
