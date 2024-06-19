@@ -10,6 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
+app.use('/api/data', dataRoutes);
 
 db.sequelize.sync().then(() => {
   console.log("Database synchronized");

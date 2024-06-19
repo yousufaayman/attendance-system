@@ -1,0 +1,188 @@
+/* General styles */
+.data-management {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+.search-bar {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.search-bar input,
+.search-bar select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.search-bar button {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.search-bar button:hover {
+  background-color: #45a049;
+}
+
+.add-entry-button {
+  padding: 10px 20px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.add-entry-button:hover {
+  background-color: #0056b3;
+}
+
+/* Modal styles */
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+  background-color: white;
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.modal h2 {
+  margin-top: 0;
+}
+
+.modal input,
+.modal select {
+  width: calc(100% - 20px);
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.modal-add-button,
+.modal-cancel-button {
+  padding: 10px 20px;
+  margin: 10px 5px 0 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.modal-add-button {
+  background-color: #28a745;
+  color: white;
+}
+
+.modal-add-button:hover {
+  background-color: #218838;
+}
+
+.modal-cancel-button {
+  background-color: #dc3545;
+  color: white;
+}
+
+.modal-cancel-button:hover {
+  background-color: #c82333;
+}
+
+/* Overlay styles */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Table styles */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.data-table th,
+.data-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.data-table th {
+  background-color: #f4f4f4;
+  cursor: pointer;
+}
+
+.data-table th:hover {
+  background-color: #ddd;
+}
+
+.data-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.data-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.data-table .actions {
+  display: flex;
+  gap: 10px;
+}
+
+.data-table .actions button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.data-table .actions .edit-button {
+  background-color: #ffc107;
+  color: white;
+}
+
+.data-table .actions .edit-button:hover {
+  background-color: #e0a800;
+}
+
+.data-table .actions .delete-button {
+  background-color: #dc3545;
+  color: white;
+}
+
+.data-table .actions .delete-button:hover {
+  background-color: #c82333;
+}
+
+th {
+  cursor: pointer;
+}
+
+.sort-indicator {
+  margin-left: 5px;
+}
+
+.sort-indicator.asc::after {
+  content: '🔼';
+}
+
+.sort-indicator.desc::after {
+  content: '🔽';
+}
