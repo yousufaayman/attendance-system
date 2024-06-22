@@ -5,7 +5,7 @@ import { AuthProvider } from './AuthContext';
 import LoginPage from './pages/LoginPage';
 import AdminDashboard from './pages/AdminDashboard';
 import TeacherDashboard from './pages/TeacherDahboard';
-// import StudentDashboard from './pages/StudentDashboard';
+import StudentDashboard from './pages/StudentDashboard';
 
 const App = () => {
   return (
@@ -18,9 +18,9 @@ const App = () => {
       <Route element={<ProtectedRoute roles={['teacher']} />}>
         <Route path="/teacher" element={<TeacherDashboard />} />
       </Route>
-      {/* <Route element={<ProtectedRoute roles={['student']} />}>
+      <Route element={<ProtectedRoute roles={['student']} />}>
         <Route path="/student" element={<StudentDashboard />} />
-      </Route> */}
+      </Route>
     </Routes>
   </AuthProvider>
   );

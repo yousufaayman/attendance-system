@@ -14,6 +14,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/data', dataRoutes); 
 app.use('/api/teacher', teacherRoutes);
+app.use('/api/student', studentRoutes);
 
 db.sequelize.sync().then(() => {
   console.log("Database synchronized");

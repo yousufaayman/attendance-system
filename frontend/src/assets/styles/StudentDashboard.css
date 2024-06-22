@@ -1,0 +1,181 @@
+/* StudentDashboard.css */
+.student-dashboard {
+  font-family: 'Roboto', sans-serif;
+  padding: 20px;
+  background-color: #f5f7fa;
+  min-height: 100vh;
+}
+
+.student-dashboard h2 {
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 24px;
+}
+
+.course-list {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.course-list li {
+  flex: 1 1 calc(33.333% - 20px);
+  padding: 15px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+  color: #333;
+}
+
+.course-list li:hover {
+  background-color: #007bff;
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.selected-course {
+  margin-bottom: 20px;
+}
+
+.calendar-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.react-calendar {
+  border: none;
+  width: 100%;
+  max-width: 600px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.react-calendar__navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.react-calendar__navigation button {
+  color: #007bff;
+  font-weight: bold;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.react-calendar__month-view__days__day {
+  color: #333;
+  font-size: 14px;
+}
+
+.react-calendar__tile {
+  border-radius: 8px;
+  padding: 10px;
+  transition: background-color 0.3s ease;
+  text-align: center;
+}
+
+.react-calendar__tile--now {
+  background-color: #ffeb3b;
+  color: white;
+}
+
+.react-calendar__tile--now:enabled:hover,
+.react-calendar__tile--now:enabled:focus {
+  background-color: #fdd835;
+}
+
+.react-calendar__tile--active {
+  background-color: #007bff;
+  color: white;
+}
+
+.react-calendar__tile--highlight {
+  background-color: #4caf50 !important;
+  color: white !important;
+  border-radius: 8px;
+}
+
+.react-calendar__tile--highlight:enabled:hover,
+.react-calendar__tile--highlight:enabled:focus {
+  background-color: #45a049 !important;
+}
+
+.loading {
+  text-align: center;
+  font-size: 18px;
+  color: #555;
+}
+
+@media (max-width: 768px) {
+  .course-list li {
+    flex: 1 1 calc(50% - 20px);
+  }
+}
+
+@media (max-width: 480px) {
+  .course-list li {
+    flex: 1 1 100%;
+  }
+}
+  
+.react-calendar__tile.highlight {
+    background: #006400 !important; 
+    color: white !important;
+    border-radius: 0%; 
+    transition: background-color 0.3s ease; 
+  }
+  
+  .react-calendar__tile.highlight-selected {
+    background: #1087ff !important; 
+    color: white !important;
+    border-radius: 0%; 
+    transition: background-color 0.3s ease;
+
+  }
+  
+  .react-calendar__tile.highlight:hover,
+  .react-calendar__tile.highlight-selected:hover {
+    background: #1087ff !important;
+    color: white !important;
+  }
+  .class-table {
+    margin-top: 20px;
+  }
+  
+  .class-table table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  .class-table th, .class-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .class-table th {
+    background-color: #f2f2f2;
+  }
+  
+  .class-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .class-table tr:hover {
+    background-color: #ddd;
+  }
+  
