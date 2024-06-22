@@ -1,4 +1,4 @@
-const { Student, Teacher, Class, Course, Group, Room, AttendanceRecord } = require('../models');
+const { Student, Teacher, Class, Course, Group, Room, AttendanceRecord, CourseInstructors } = require('../models');
 
 const getData = async (req, res) => {
   const { table } = req.params;
@@ -93,65 +93,6 @@ const getRooms = async (req, res) => {
   }
 };
 
-const getTeacherCourses = async (req, res) => {
-  try {
-    const teacherId = req.user.id; 
-    const courses = await Course.findAll({
-      include: [
-        {
-          model: Teacher,
-          as: 'teachers',
-          where: { id: teacherId },
-          through: { attributes: [] } // exclude the join table attributes
-        }
-      ]
-    });
-    res.json(courses);
-  } catch (error) {
-    console.error('Error fetching teacher courses:', error);
-    res.status(500).json({ error: 'Error fetching teacher courses' });
-  }
-};
-
-const getCourseClasses = async (req, res) => {
-  try {
-    const { courseId } = req.params;
-    const classes = await Class.findAll({ where: { course_id: courseId } });
-    res.json(classes);
-  } catch (error) {
-    console.error('Error fetching course classes:', error);
-    res.status(500).json({ error: 'Error fetching course classes' });
-  }
-};
-
-const getCourseStudents = async (req, res) => {
-  try {
-    const { courseId } = req.params;
-    const groups = await Group.findAll({ where: { course_id: courseId } });
-    const groupIds = groups.map(group => group.id);
-    const students = await Student.findAll({ where: { group_id: groupIds } });
-    res.json(students);
-  } catch (error) {
-    console.error('Error fetching course students:', error);
-    res.status(500).json({ error: 'Error fetching course students' });
-  }
-};
-
-const getCourseAttendance = async (req, res) => {
-  try {
-    const { courseId } = req.params;
-    const groups = await Group.findAll({ where: { course_id: courseId } });
-    const groupIds = groups.map(group => group.id);
-    const students = await Student.findAll({ where: { group_id: groupIds } });
-    const studentIds = students.map(student => student.id);
-    const attendanceRecords = await AttendanceRecord.findAll({ where: { student_id: studentIds } });
-    res.json(attendanceRecords);
-  } catch (error) {
-    console.error('Error fetching course attendance records:', error);
-    res.status(500).json({ error: 'Error fetching course attendance records' });
-  }
-};
-
 function getModel(table) {
   switch (table) {
     case 'students':
@@ -180,8 +121,4 @@ module.exports = {
   getCourses,
   getTeachers,
   getRooms,
-  getTeacherCourses,
-  getCourseClasses,
-  getCourseStudents,
-  getCourseAttendance,
 };

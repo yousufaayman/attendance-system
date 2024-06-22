@@ -1,0 +1,122 @@
+.teacher-dashboard {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.course-column, .class-column, .students-attendance-column {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-height: 400px; /* Adjust the max-height as needed */
+  overflow-y: auto; /* Make elements scrollable */
+}
+
+.students-attendance-column {
+  grid-column: span 2;
+}
+
+.course-column h3, .class-column h3, .students-attendance-column h3 {
+  margin-bottom: 10px;
+}
+
+.course-column ul, .class-column ul {
+  list-style: none;
+  padding: 0;
+  max-height: 300px; /* Adjust the max-height as needed */
+  overflow-y: auto; /* Make elements scrollable */
+}
+
+.course-column li, .class-column li {
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.course-column li:hover, .class-column li:hover {
+  background-color: #f0f0f0;
+}
+
+button {
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+form label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+form input[type="datetime-local"],
+form input[type="number"],
+form input[type="date"],
+form select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.scrollable-table {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}

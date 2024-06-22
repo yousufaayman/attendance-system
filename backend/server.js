@@ -4,6 +4,8 @@ const cors = require('cors');
 const db = require('./models');
 const authRoutes = require('./routes/authRoutes');
 const dataRoutes = require('./routes/dataRoutes');
+const teacherRoutes = require('./routes/teacherRoutes');
+const studentRoutes = require('./routes/studentRoutes');
 
 const app = express();
 app.use(cors());
@@ -11,7 +13,7 @@ app.use(express.json());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/data', dataRoutes); 
-app.use('/api/teacher', dataRoutes);
+app.use('/api/teacher', teacherRoutes);
 
 db.sequelize.sync().then(() => {
   console.log("Database synchronized");
