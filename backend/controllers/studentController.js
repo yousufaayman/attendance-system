@@ -68,7 +68,7 @@ const checkInToClass = async (req, res) => {
   const studentId = req.user.id;
 
   try {
-    const classDetails = await db.Class.findOne({ where: { id: classId, course_id: courseId } });
+    const classDetails = await Class.findOne({ where: { id: classId, course_id: courseId } });
     if (!classDetails) {
       return res.status(404).json({ error: 'Class not found' });
     }
@@ -81,7 +81,7 @@ const checkInToClass = async (req, res) => {
       return res.status(400).json({ error: 'You can only check in during the class time' });
     }
 
-    const attendanceRecord = await db.AttendanceRecord.findOne({
+    const attendanceRecord = await AttendanceRecord.findOne({
       where: {
         student_id: studentId,
         class_id: classId,
@@ -91,7 +91,7 @@ const checkInToClass = async (req, res) => {
     if (attendanceRecord) {
       await attendanceRecord.update({ check_in_time: currentTime, status: 'Present' });
     } else {
-      await db.AttendanceRecord.create({
+      await AttendanceRecord.create({
         student_id: studentId,
         class_id: classId,
         check_in_time: currentTime,
@@ -111,4 +111,4 @@ module.exports = {
   getClassesForCourse,
   getAttendanceForCourse,
   checkInToClass
-};
+}; 
