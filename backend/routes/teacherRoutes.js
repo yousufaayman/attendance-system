@@ -14,4 +14,4 @@ router.post('/classes-add-attendance/:classId/attendance', protect, teacherContr
 router.put('/classes-update-attendance/:classId/attendance/:recordId', protect, teacherController.updateAttendanceRecord);
 
 module.exports = router;
- 
+  

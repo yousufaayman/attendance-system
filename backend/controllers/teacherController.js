@@ -32,7 +32,7 @@ const getCourseClasses = async (req, res) => {
     console.error('Error fetching course classes:', error);
     res.status(500).json({ error: 'Error fetching course classes' });
   }
-};
+}; 
 
 const getCourseStudents = async (req, res) => {
   try {
@@ -62,6 +62,7 @@ const addClass = async (req, res) => {
   try {
     const { course_id, room_id, start_time, duration } = req.body;
     const teacher_id = req.user.id; 
+    const parsedStartTime = new Date(start_time);
     const end_time = new Date(new Date(start_time).getTime() + duration * 60000);
 
     const existingClass = await Class.findOne({

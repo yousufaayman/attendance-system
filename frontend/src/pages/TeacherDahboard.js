@@ -6,7 +6,7 @@ import '../assets/styles/TeacherDashboard.css';
 Modal.setAppElement('#root');
 
 const TeacherDashboard = () => {
-  const {authAxios } = useAuth();
+  const { authAxios } = useAuth();
   const [courses, setCourses] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [classes, setClasses] = useState([]);
@@ -88,11 +88,11 @@ const TeacherDashboard = () => {
         let endDate = new Date(end_date);
 
         while (startDate <= endDate) {
-          await authAxios.post('/api/teacher/add-classes', { course_id, room_id, start_time: startDate, duration });
+          await authAxios.post('/api/teacher/add-classes', { course_id, room_id, start_time: startDate.toISOString(), duration });
           startDate.setDate(startDate.getDate() + 7);
         }
       } else {
-        await authAxios.post('/api/teacher/add-classes', { course_id, room_id, start_time, duration });
+        await authAxios.post('/api/teacher/add-classes', { course_id, room_id, start_time: new Date(start_time).toISOString(), duration });
       }
       setIsModalOpen(false);
       handleCourseSelect(selectedCourse); // Refresh classes
