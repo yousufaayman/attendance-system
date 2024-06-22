@@ -13,6 +13,8 @@ const AdminDataManagement = ({ table }) => {
   const [foreignKeyData, setForeignKeyData] = useState({});
   const [sortConfig, setSortConfig] = useState({ key: '', direction: '' });
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedInstructors, setSelectedInstructors] = useState([]);
+  const [editSelectedInstructors, setEditSelectedInstructors] = useState([]);
 
   const { authAxios } = useAuth();
 
@@ -20,6 +22,7 @@ const AdminDataManagement = ({ table }) => {
     students: ['group_id'],
     classes: ['course_id', 'room_id', 'teacher_id'],
     attendanceRecords: ['student_id', 'class_id'],
+    courses: ['teacher_id'], // Adding teacher_id to foreignKeyFields for courses
   }), []);
 
   const fetchData = useCallback(async () => {
@@ -80,16 +83,36 @@ const AdminDataManagement = ({ table }) => {
     });
   };
 
+  const handleInstructorChange = (e) => {
+    const { value, checked } = e.target;
+    if (checked) {
+      setSelectedInstructors([...selectedInstructors, value]);
+    } else {
+      setSelectedInstructors(selectedInstructors.filter(id => id !== value));
+    }
+  };
+
+  const handleEditInstructorChange = (e) => {
+    const { value, checked } = e.target;
+    if (checked) {
+      setEditSelectedInstructors([...editSelectedInstructors, value]);
+    } else {
+      setEditSelectedInstructors(editSelectedInstructors.filter(id => id !== value));
+    }
+  };
+
   const handleAddNewEntry = async () => {
     const entryWithID = {
       ...newEntry,
       id: uuidv4(), // Generate a unique ID
+      teachers: selectedInstructors
     };
 
     try {
       const response = await authAxios.post(`/api/data/${table}`, entryWithID);
       setData([...data, response.data]);
       setNewEntry({});
+      setSelectedInstructors([]);
       setIsModalOpen(false);
     } catch (error) {
       console.error('Error adding new entry:', error);
@@ -98,9 +121,14 @@ const AdminDataManagement = ({ table }) => {
 
   const handleUpdateEntry = async () => {
     try {
-      const response = await authAxios.put(`/api/data/${table}/${editEntry.id}`, editEntry);
+      const entryWithInstructors = {
+        ...editEntry,
+        teachers: editSelectedInstructors
+      };
+      const response = await authAxios.put(`/api/data/${table}/${editEntry.id}`, entryWithInstructors);
       setData(data.map(item => (item.id === editEntry.id ? response.data : item)));
       setEditEntry(null);
+      setEditSelectedInstructors([]);
     } catch (error) {
       console.error('Error updating entry:', error);
     }
@@ -185,6 +213,22 @@ const AdminDataManagement = ({ table }) => {
                 ))}
               </select>
             );
+          } else if (table === 'courses' && key === 'teachers') {
+            return (
+              <div key={key}>
+                <label>Instructors:</label>
+                {foreignKeyData.teachers && foreignKeyData.teachers.map(teacher => (
+                  <div key={teacher.id}>
+                    <input
+                      type="checkbox"
+                      value={teacher.id}
+                      onChange={handleInstructorChange}
+                    />
+                    <label>{teacher.name}</label>
+                  </div>
+                ))}
+              </div>
+            );
           } else {
             return (
               <input
@@ -221,7 +265,10 @@ const AdminDataManagement = ({ table }) => {
                 <td key={idx}>{item[key]}</td>
               ))}
               <td>
-                <button onClick={() => setEditEntry(item)}>Edit</button>
+                <button onClick={() => {
+                  setEditEntry(item);
+                  setEditSelectedInstructors(item.teachers ? item.teachers.map(teacher => teacher.id) : []);
+                }}>Edit</button>
                 <button onClick={() => handleDeleteEntry(item.id)}>Delete</button>
               </td>
             </tr>
@@ -244,34 +291,51 @@ const AdminDataManagement = ({ table }) => {
                 name={key}
                 value={editEntry[key] || ''}
                 onChange={handleEditEntryChange}
-                >
-                  <option value="">Select {key.replace('_id', '')}</option>
-                  {foreignKeyData[key] && foreignKeyData[key].map(item => (
-                    <option key={item.id} value={item.id}>
-                      {item.name}
-                    </option>
-                  ))}
-                </select>
-              );
-            } else {
-              return (
-                <input
-                  key={key}
-                  name={key}
-                  placeholder={key}
-                  value={editEntry[key] || ''}
-                  onChange={handleEditEntryChange}
-                />
-              );
-            }
-          })}
-          <button className="modal-add-button" onClick={handleUpdateEntry}>Update</button>
-          <button className="modal-cancel-button" onClick={() => setEditEntry(null)}>Cancel</button>
-        </Modal>
-      </div>
-    );
-  };
-  
-  export default AdminDataManagement;
+              >
+                <option value="">Select {key.replace('_id', '')}</option>
+                {foreignKeyData[key] && foreignKeyData[key].map(item => (
+                  <option key={item.id} value={item.id}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
+            );
+          } else if (table === 'courses' && key === 'teachers') {
+            return (
+              <div key={key}>
+                <label>Instructors:</label>
+                {foreignKeyData.teachers && foreignKeyData.teachers.map(teacher => (
+                  <div key={teacher.id}>
+                    <input
+                      type="checkbox"
+                      value={teacher.id}
+                      checked={editSelectedInstructors.includes(teacher.id)}
+                      onChange={handleEditInstructorChange}
+                    />
+                    <label>{teacher.name}</label>
+                  </div>
+                ))}
+              </div>
+            );
+          } else {
+            return (
+              <input
+                key={key}
+                name={key}
+                placeholder={key}
+                value={editEntry[key] || ''}
+                onChange={handleEditEntryChange}
+              />
+            );
+          }
+        })}
+        <button className="modal-add-button" onClick={handleUpdateEntry}>Update</button>
+        <button className="modal-cancel-button" onClick={() => setEditEntry(null)}>Cancel</button>
+      </Modal>
+    </div>
+  );
+};
 
-  
+export default AdminDataManagement;
+
+               
