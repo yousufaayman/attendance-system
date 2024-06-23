@@ -4,7 +4,11 @@ const getData = async (req, res) => {
   const { table } = req.params;
   try {
     const Model = getModel(table);
-    const entries = await Model.findAll();
+    const options = {};
+    if (table === 'courses') {
+      options.include = [{ model: Teacher, as: 'Teachers' }];
+    }
+    const entries = await Model.findAll(options);
     res.json(entries);
   } catch (error) {
     console.error(`Error fetching data for table ${table}:`, error);
@@ -18,6 +22,11 @@ const createData = async (req, res) => {
   try {
     const Model = getModel(table);
     const newEntry = await Model.create(data);
+
+    if (table === 'courses' && data.instructors) {
+      await newEntry.setTeachers(data.instructors);
+    }
+
     res.status(201).json(newEntry);
   } catch (error) {
     console.error(`Error adding data to table ${table}:`, error);
@@ -30,10 +39,18 @@ const updateData = async (req, res) => {
   const data = req.body;
   try {
     const Model = getModel(table);
-    const updatedEntry = await Model.update(data, { where: { id } });
-    if (updatedEntry[0] === 0) {
+    const entry = await Model.findByPk(id);
+
+    if (!entry) {
       return res.status(404).json({ error: 'Entry not found' });
     }
+
+    await entry.update(data);
+
+    if (table === 'courses' && data.instructors) {
+      await entry.setTeachers(data.instructors);
+    }
+
     res.json({ message: 'Entry updated successfully' });
   } catch (error) {
     console.error(`Error updating data in table ${table}:`, error);

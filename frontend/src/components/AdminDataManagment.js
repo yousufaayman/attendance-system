@@ -22,7 +22,7 @@ const AdminDataManagement = ({ table }) => {
     students: ['group_id'],
     classes: ['course_id', 'room_id', 'teacher_id'],
     attendanceRecords: ['student_id', 'class_id'],
-    courses: ['teacher_id'], // Adding teacher_id to foreignKeyFields for courses
+    courses: ['teacher_id'],
   }), []);
 
   const fetchData = useCallback(async () => {
@@ -46,6 +46,8 @@ const AdminDataManagement = ({ table }) => {
     const results = await Promise.all(promises);
     const foreignKeyData = results.reduce((acc, curr) => ({ ...acc, ...curr }), {});
     setForeignKeyData(foreignKeyData);
+
+    console.log('ForeignKeyData:', foreignKeyData); // Add this line to debug
   }, [table, foreignKeyFields, authAxios]);
 
   useEffect(() => {
@@ -90,6 +92,7 @@ const AdminDataManagement = ({ table }) => {
     } else {
       setSelectedInstructors(selectedInstructors.filter(id => id !== value));
     }
+    console.log('SelectedInstructors:', selectedInstructors); // Add this line to debug
   };
 
   const handleEditInstructorChange = (e) => {
@@ -104,9 +107,11 @@ const AdminDataManagement = ({ table }) => {
   const handleAddNewEntry = async () => {
     const entryWithID = {
       ...newEntry,
-      id: uuidv4(), // Generate a unique ID
+      id: uuidv4(),
       teachers: selectedInstructors
     };
+
+    console.log('EntryWithID:', entryWithID); // Add this line to debug
 
     try {
       const response = await authAxios.post(`/api/data/${table}`, entryWithID);
@@ -125,6 +130,9 @@ const AdminDataManagement = ({ table }) => {
         ...editEntry,
         teachers: editSelectedInstructors
       };
+
+      console.log('EntryWithInstructors:', entryWithInstructors); // Add this line to debug
+
       const response = await authAxios.put(`/api/data/${table}/${editEntry.id}`, entryWithInstructors);
       setData(data.map(item => (item.id === editEntry.id ? response.data : item)));
       setEditEntry(null);
@@ -213,129 +221,124 @@ const AdminDataManagement = ({ table }) => {
                 ))}
               </select>
             );
-          } else if (table === 'courses' && key === 'teachers') {
+          } else if (table === 'courses' && key === 'teacher_id') {
             return (
               <div key={key}>
                 <label>Instructors:</label>
-                {foreignKeyData.teachers && foreignKeyData.teachers.map(teacher => (
-                  <div key={teacher.id}>
-                    <input
-                      type="checkbox"
-                      value={teacher.id}
-                      onChange={handleInstructorChange}
-                    />
-                    <label>{teacher.name}</label>
-                  </div>
-                ))}
+                <select multiple={true} value={selectedInstructors} onChange={handleInstructorChange}>
+                  {foreignKeyData.teachers && foreignKeyData.teachers.map(teacher => (
+                    <option key={teacher.id} value={teacher.id}>
+                      {teacher.name}
+                    </option>
+                  ))}
+                </select>
               </div>
             );
           } else {
             return (
               <input
-                key={key}
-                name={key}
-                placeholder={key}
-                value={newEntry[key] || ''}
-                onChange={handleNewEntryChange}
-              />
-            );
-          }
-        })}
-        <button className="modal-add-button" onClick={handleAddNewEntry}>Add</button>
-        <button className="modal-cancel-button" onClick={() => setIsModalOpen(false)}>Cancel</button>
-      </Modal>
-      <table className="data-table">
-        <thead>
-          <tr>
-            {Object.keys(data[0] || {}).map((key) => (
-              <th key={key} onClick={() => handleSort(key)}>
-                {key}
-                {sortConfig.key === key && (
-                  <span className={`sort-indicator ${sortConfig.direction === 'ascending' ? 'asc' : 'desc'}`}></span>
-                )}
-              </th>
-            ))}
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sortedData.map((item, index) => (
-            <tr key={index}>
-              {Object.keys(item).map((key, idx) => (
-                <td key={idx}>{item[key]}</td>
-              ))}
-              <td>
-                <button onClick={() => {
-                  setEditEntry(item);
-                  setEditSelectedInstructors(item.teachers ? item.teachers.map(teacher => teacher.id) : []);
-                }}>Edit</button>
-                <button onClick={() => handleDeleteEntry(item.id)}>Delete</button>
-              </td>
-            </tr>
+              key={key}
+              name={key}
+              placeholder={key}
+              value={newEntry[key] || ''}
+              onChange={handleNewEntryChange}
+            />
+          );
+        }
+      })}
+      <button className="modal-add-button" onClick={handleAddNewEntry}>Add</button>
+      <button className="modal-cancel-button" onClick={() => setIsModalOpen(false)}>Cancel</button>
+    </Modal>
+    <table className="data-table">
+      <thead>
+        <tr>
+          {Object.keys(data[0] || {}).map((key) => (
+            <th key={key} onClick={() => handleSort(key)}>
+              {key}
+              {sortConfig.key === key && (
+                <span className={`sort-indicator ${sortConfig.direction === 'ascending' ? 'asc' : 'desc'}`}></span>
+              )}
+            </th>
           ))}
-        </tbody>
-      </table>
-      <Modal
-        isOpen={editEntry !== null}
-        onRequestClose={() => setEditEntry(null)}
-        className="modal"
-        overlayClassName="overlay"
-      >
-        <h2>Edit Entry</h2>
-        {editEntry && Object.keys(editEntry).map((key) => {
-          if (key === 'createdAt' || key === 'updatedAt' || key === 'id') return null;
-          if (foreignKeyFields[table] && foreignKeyFields[table].includes(key)) {
-            return (
-              <select
-                key={key}
-                name={key}
-                value={editEntry[key] || ''}
-                onChange={handleEditEntryChange}
-              >
-                <option value="">Select {key.replace('_id', '')}</option>
-                {foreignKeyData[key] && foreignKeyData[key].map(item => (
-                  <option key={item.id} value={item.id}>
-                    {item.name}
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {sortedData.map((item, index) => (
+          <tr key={index}>
+            {Object.keys(item).map((key, idx) => (
+              <td key={idx}>
+                {key === 'Teachers' && Array.isArray(item[key])
+                  ? item[key].map(teacher => teacher.name).join(', ')
+                  : item[key]}
+              </td>
+            ))}
+            <td>
+              <button onClick={() => {
+                setEditEntry(item);
+                setEditSelectedInstructors(item.Teachers ? item.Teachers.map(teacher => teacher.id) : []);
+              }}>Edit</button>
+              <button onClick={() => handleDeleteEntry(item.id)}>Delete</button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <Modal
+      isOpen={editEntry !== null}
+      onRequestClose={() => setEditEntry(null)}
+      className="modal"
+      overlayClassName="overlay"
+    >
+      <h2>Edit Entry</h2>
+      {editEntry && Object.keys(editEntry).map((key) => {
+        if (key === 'createdAt' || key === 'updatedAt' || key === 'id') return null;
+        if (foreignKeyFields[table] && foreignKeyFields[table].includes(key)) {
+          return (
+            <select
+              key={key}
+              name={key}
+              value={editEntry[key] || ''}
+              onChange={handleEditEntryChange}
+            >
+              <option value="">Select {key.replace('_id', '')}</option>
+              {foreignKeyData[key] && foreignKeyData[key].map(item => (
+                <option key={item.id} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
+          );
+        } else if (table === 'courses' && key === 'teacher_id') {
+          return (
+            <div key={key}>
+              <label>Instructors:</label>
+              <select multiple={true} value={editSelectedInstructors} onChange={handleEditInstructorChange}>
+                {foreignKeyData.teachers && foreignKeyData.teachers.map(teacher => (
+                  <option key={teacher.id} value={teacher.id}>
+                    {teacher.name}
                   </option>
                 ))}
               </select>
-            );
-          } else if (table === 'courses' && key === 'teachers') {
-            return (
-              <div key={key}>
-                <label>Instructors:</label>
-                {foreignKeyData.teachers && foreignKeyData.teachers.map(teacher => (
-                  <div key={teacher.id}>
-                    <input
-                      type="checkbox"
-                      value={teacher.id}
-                      checked={editSelectedInstructors.includes(teacher.id)}
-                      onChange={handleEditInstructorChange}
-                    />
-                    <label>{teacher.name}</label>
-                  </div>
-                ))}
-              </div>
-            );
-          } else {
-            return (
-              <input
-                key={key}
-                name={key}
-                placeholder={key}
-                value={editEntry[key] || ''}
-                onChange={handleEditEntryChange}
-              />
-            );
-          }
-        })}
-        <button className="modal-add-button" onClick={handleUpdateEntry}>Update</button>
-        <button className="modal-cancel-button" onClick={() => setEditEntry(null)}>Cancel</button>
-      </Modal>
-    </div>
-  );
+            </div>
+          );
+        } else {
+          return (
+            <input
+              key={key}
+              name={key}
+              placeholder={key}
+              value={editEntry[key] || ''}
+              onChange={handleEditEntryChange}
+            />
+          );
+        }
+      })}
+      <button className="modal-add-button" onClick={handleUpdateEntry}>Update</button>
+      <button className="modal-cancel-button" onClick={() => setEditEntry(null)}>Cancel</button>
+    </Modal>
+  </div>
+);
 };
 
 export default AdminDataManagement;
-
-               

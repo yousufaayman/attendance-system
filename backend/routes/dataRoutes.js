@@ -14,3 +14,4 @@ router.get('/teachers', protect, dataController.getTeachers);
 router.get('/rooms', protect, dataController.getRooms);
 
 module.exports = router;
+ 
